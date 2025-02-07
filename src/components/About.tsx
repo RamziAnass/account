@@ -117,7 +117,7 @@ const About: React.FC = () => {
               className="inline-flex items-center gap-2 rounded-lg bg-primary-500 px-6 py-3 text-white transition-colors hover:bg-primary-600 dark:bg-primary-600 dark:hover:bg-primary-700"
             >
               <FileDown className="h-5 w-5" />
-              Télécharger CV
+             Voir Mon CV
             </a>
           </div>
         </motion.div>
