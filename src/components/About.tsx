@@ -50,17 +50,7 @@ const About: React.FC = () => {
                 </div>
               </div>
 
-              <div className="bg-white dark:bg-black rounded-xl shadow-lg p-8 border border-gray-100 dark:border-gray-800">
-                <div className="flex items-center gap-4 mb-6">
-                  <Award className="h-8 w-8 text-primary-500" />
-                  <h3 className="text-2xl font-semibold">Certifications</h3>
-                </div>
-                <ul className="space-y-4 list-disc list-inside text-gray-600 dark:text-gray-400">
-                  <li>Certification en Data Analysis - Google</li>
-                  <li>Certification en Business Intelligence - Microsoft</li>
-                  <li>Certification en Market Research - LinkedIn Learning</li>
-                </ul>
-              </div>
+      
             </div>
 
             <div className="space-y-8">
