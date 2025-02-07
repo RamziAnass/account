@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Github, Linkedin, Mail, Moon, Sun, Menu } from 'lucide-react';
 import { cn } from '../utils/cn';
@@ -6,10 +6,12 @@ import { cn } from '../utils/cn';
 interface SidebarProps {
   isDarkMode: boolean;
   toggleTheme: () => void;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isDarkMode, toggleTheme }) => {
-  const [isOpen, setIsOpen] = React.useState(false);
+const Sidebar: React.FC<SidebarProps> = ({ isDarkMode, toggleTheme, isOpen, onClose }) => {
+  const sidebarRef = useRef<HTMLElement>(null);
 
   const navItems = [
     { href: '#home', label: 'Acceuil' },
@@ -19,18 +21,38 @@ const Sidebar: React.FC<SidebarProps> = ({ isDarkMode, toggleTheme }) => {
     { href: '#contact', label: 'Contact' },
   ];
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
+        onClose();
+      }
+    };
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleEscape);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [onClose]);
+
+  const handleNavClick = () => {
+    onClose();
+  };
+
   return (
     <>
-      <button
-        className="fixed right-4 top-4 z-50 rounded-lg bg-white p-2 shadow-lg dark:bg-black dark:border dark:border-gray-800 lg:hidden"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        <Menu className="h-6 w-6" />
-      </button>
-
       <aside
+        ref={sidebarRef}
         className={cn(
-          'fixed inset-y-0 left-0 z-40 w-[280px] border-r border-transparent bg-white px-6 py-8 shadow-lg transition-transform dark:border-gray-800 dark:bg-black lg:translate-x-0',
+          'fixed inset-y-0 left-0 z-40 w-[280px] border-r border-transparent bg-white px-6 py-8 shadow-lg transition-all duration-300 ease-in-out dark:border-gray-800 dark:bg-black',
           isOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >
@@ -56,6 +78,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isDarkMode, toggleTheme }) => {
                 <a
                   href={item.href}
                   className="nav-link hover:bg-gray-50 dark:hover:bg-gray-900 rounded-lg"
+                  onClick={handleNavClick}
                 >
                   {item.label}
                 </a>
@@ -64,8 +87,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isDarkMode, toggleTheme }) => {
           </ul>
         </nav>
 
-        <br />
-        
         <div className="mt-auto">
           <div className="flex justify-center space-x-4">
             <a
@@ -105,6 +126,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isDarkMode, toggleTheme }) => {
           </button>
         </div>
       </aside>
+
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-30 transition-opacity duration-300 ease-in-out"
+          onClick={onClose}
+        />
+      )}
     </>
   );
 };
